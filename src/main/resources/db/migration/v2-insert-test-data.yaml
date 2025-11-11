@@ -7,24 +7,21 @@ databaseChangeLog:
             tableName: users
             columns:
               - column:
-                  name: id
-                  value: 1
-              - column:
                   name: username
                   value: "admin"
               - column:
                   name: password
                   value: "$2a$10$VJIzajBWSlopw.cOWguJA.Ro7KGguH0I6XKL/VnpSeWUNVL1hmDxS"
               - column:
+                  name: email
+                  value: "admin@bankapp.com"
+              - column:
                   name: role
-                  value: "ADMIN"
+                  value: "ROLE_ADMIN"
 
         - insert:
             tableName: users
             columns:
-              - column:
-                  name: id
-                  value: 2
               - column:
                   name: username
                   value: "user1"
@@ -32,15 +29,15 @@ databaseChangeLog:
                   name: password
                   value: "$2a$10$VJIzajBWSlopw.cOWguJA.Ro7KGguH0I6XKL/VnpSeWUNVL1hmDxS"
               - column:
+                  name: email
+                  value: "ivan.ivanov@example.com"
+              - column:
                   name: role
-                  value: "USER"
+                  value: "ROLE_USER"
 
         - insert:
             tableName: users
             columns:
-              - column:
-                  name: id
-                  value: 3
               - column:
                   name: username
                   value: "user2"
@@ -48,15 +45,15 @@ databaseChangeLog:
                   name: password
                   value: "$2a$10$VJIzajBWSlopw.cOWguJA.Ro7KGguH0I6XKL/VnpSeWUNVL1hmDxS"
               - column:
+                  name: email
+                  value: "elena.sidorova@example.com"
+              - column:
                   name: role
-                  value: "USER"
+                  value: "ROLE_USER"
 
         - insert:
             tableName: users
             columns:
-              - column:
-                  name: id
-                  value: 4
               - column:
                   name: username
                   value: "user3"
@@ -64,15 +61,15 @@ databaseChangeLog:
                   name: password
                   value: "$2a$10$VJIzajBWSlopw.cOWguJA.Ro7KGguH0I6XKL/VnpSeWUNVL1hmDxS"
               - column:
+                  name: email
+                  value: "petr.smirnov@example.com"
+              - column:
                   name: role
-                  value: "USER"
+                  value: "ROLE_USER"
 
         - insert:
             tableName: users
             columns:
-              - column:
-                  name: id
-                  value: 5
               - column:
                   name: username
                   value: "user4"
@@ -80,8 +77,11 @@ databaseChangeLog:
                   name: password
                   value: "$2a$10$VJIzajBWSlopw.cOWguJA.Ro7KGguH0I6XKL/VnpSeWUNVL1hmDxS"
               - column:
+                  name: email
+                  value: "olga.kuznecova@example.com"
+              - column:
                   name: role
-                  value: "USER"
+                  value: "ROLE_USER"
 
   - changeSet:
       id: v2-test-data-2
@@ -90,9 +90,6 @@ databaseChangeLog:
         - insert:
             tableName: cards
             columns:
-              - column:
-                  name: id
-                  value: 1
               - column:
                   name: card_number
                   value: "4111111111111111"
@@ -119,9 +116,6 @@ databaseChangeLog:
             tableName: cards
             columns:
               - column:
-                  name: id
-                  value: 2
-              - column:
                   name: card_number
                   value: "4222222222222222"
               - column:
@@ -146,9 +140,6 @@ databaseChangeLog:
         - insert:
             tableName: cards
             columns:
-              - column:
-                  name: id
-                  value: 3
               - column:
                   name: card_number
                   value: "4333333333333333"
@@ -175,9 +166,6 @@ databaseChangeLog:
             tableName: cards
             columns:
               - column:
-                  name: id
-                  value: 4
-              - column:
                   name: card_number
                   value: "4444444444444444"
               - column:
@@ -202,9 +190,6 @@ databaseChangeLog:
         - insert:
             tableName: cards
             columns:
-              - column:
-                  name: id
-                  value: 5
               - column:
                   name: card_number
                   value: "4555555555555555"

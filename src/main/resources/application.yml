@@ -25,11 +25,20 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:db/migration/changelog-master.yaml
+  messages:
+    encoding: UTF-8
+
+token:
+  signing:
+    key: 53A73E5F1C4E0A2D3B5F2D784E6AGG423D6F247D1F6E5C3A596D635A75327855
 
 springdoc:
   swagger-ui:
-    url: /docs/openapi.yaml
-    path: /swagger-ui.html
+#    url: /docs/openapi.yaml
+#    path: /swagger-ui.html
 
 server:
   port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
