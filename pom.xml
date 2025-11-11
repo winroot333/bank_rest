@@ -19,8 +19,6 @@
         <mapstruct.version>1.6.3</mapstruct.version>
         <jjwt.version>0.11.5</jjwt.version>
         <lombok.version>1.18.38</lombok.version>
-        <openapi-generator.maven-plugin.version>7.14.0</openapi-generator.maven-plugin.version>
-        <build-helper.maven-plugin.version>3.6.0</build-helper.maven-plugin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -36,10 +34,19 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
+            <artifactId>spring-restdocs-mockmvc</artifactId>
+            <groupId>org.springframework.restdocs</groupId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>

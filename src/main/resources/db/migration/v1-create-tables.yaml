@@ -1,0 +1,137 @@
+databaseChangeLog:
+  - changeSet:
+      id: v1-create-tables-1
+      author: Mihail
+      changes:
+        - createTable:
+            tableName: users
+            remarks: "Users table"
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: "Unique user id"
+
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+                  remarks: "Unique login name"
+
+              - column:
+                  name: password
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                  remarks: "Encrypted password"
+
+              - column:
+                  name: role
+                  type: varchar(20)
+                  defaultValue: "USER"
+                  constraints:
+                    nullable: false
+                  remarks: "User role with predefined values"
+
+  - changeSet:
+      id: v1-create-tables-2
+      author: Mihail
+      changes:
+        - createTable:
+            tableName: cards
+            remarks: "Bank cards information"
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  remarks: "Auto-generated unique ID"
+              - column:
+                  name: card_number
+                  type: varchar(16)
+                  constraints:
+                    nullable: false
+                    unique: true
+                  remarks: "16 digit card number"
+
+              - column:
+                  name: card_holder
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                  remarks: "Cardholder name on card"
+
+              - column:
+                  name: masked_number
+                  type: varchar(19)
+                  constraints:
+                    nullable: false
+                  remarks: "Masked card number for display"
+
+              - column:
+                  name: balance
+                  type: numeric(19,2)
+                  defaultValue: 0.00
+                  constraints:
+                    nullable: false
+                  remarks: "Current balance with 2 decimal places"
+
+              - column:
+                  name: expiration_date
+                  type: date
+                  constraints:
+                    nullable: false
+                  remarks: "Card expiration date"
+
+              - column:
+                  name: status
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+                  remarks: "Current card status: ACTIVE, BLOCKED, EXPIRED"
+
+              - column:
+                  name: owner_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_cards_owner
+                    references: users(id)
+                  remarks: "Owner id"
+
+        - createIndex:
+            indexName: idx_cards_owner
+            tableName: cards
+            columns:
+              - column:
+                  name: owner_id
+                  type: bigint
+  - changeSet:
+      id: v1-add-user-status-column
+      author: Mihail
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: status
+                  type: varchar(15)
+                  defaultValue: "ACTIVE"
+                  constraints:
+                    nullable: false
+                  remarks: "User status: ACTIVE, BLOCKED, DELETED"
+
+        - createIndex:
+            indexName: idx_users_status
+            tableName: users
+            columns:
+              - column:
+                  name: status
+                  type: varchar(15)

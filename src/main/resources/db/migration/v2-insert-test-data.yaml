@@ -1,0 +1,228 @@
+databaseChangeLog:
+  - changeSet:
+      id: v2-test-data-1
+      author: Mihail
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: username
+                  value: "admin"
+              - column:
+                  name: password
+                  value: "$2a$10$VJIzajBWSlopw.cOWguJA.Ro7KGguH0I6XKL/VnpSeWUNVL1hmDxS"
+              - column:
+                  name: role
+                  value: "ADMIN"
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: username
+                  value: "user1"
+              - column:
+                  name: password
+                  value: "$2a$10$VJIzajBWSlopw.cOWguJA.Ro7KGguH0I6XKL/VnpSeWUNVL1hmDxS"
+              - column:
+                  name: role
+                  value: "USER"
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: username
+                  value: "user2"
+              - column:
+                  name: password
+                  value: "$2a$10$VJIzajBWSlopw.cOWguJA.Ro7KGguH0I6XKL/VnpSeWUNVL1hmDxS"
+              - column:
+                  name: role
+                  value: "USER"
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: username
+                  value: "user3"
+              - column:
+                  name: password
+                  value: "$2a$10$VJIzajBWSlopw.cOWguJA.Ro7KGguH0I6XKL/VnpSeWUNVL1hmDxS"
+              - column:
+                  name: role
+                  value: "USER"
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: username
+                  value: "user4"
+              - column:
+                  name: password
+                  value: "$2a$10$VJIzajBWSlopw.cOWguJA.Ro7KGguH0I6XKL/VnpSeWUNVL1hmDxS"
+              - column:
+                  name: role
+                  value: "USER"
+
+  - changeSet:
+      id: v2-test-data-2
+      author: Mihail
+      changes:
+        - insert:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: card_number
+                  value: "4111111111111111"
+              - column:
+                  name: card_holder
+                  value: "MIHAIL PETROV"
+              - column:
+                  name: masked_number
+                  value: "**** **** **** 1111"
+              - column:
+                  name: balance
+                  value: 10000.00
+              - column:
+                  name: expiration_date
+                  value: "2025-12-31"
+              - column:
+                  name: status
+                  value: "ACTIVE"
+              - column:
+                  name: owner_id
+                  value: 1
+
+        - insert:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: card_number
+                  value: "4222222222222222"
+              - column:
+                  name: card_holder
+                  value: "IVAN IVANOV"
+              - column:
+                  name: masked_number
+                  value: "**** **** **** 2222"
+              - column:
+                  name: balance
+                  value: 5000.00
+              - column:
+                  name: expiration_date
+                  value: "2024-10-31"
+              - column:
+                  name: status
+                  value: "ACTIVE"
+              - column:
+                  name: owner_id
+                  value: 2
+
+        - insert:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: card_number
+                  value: "4333333333333333"
+              - column:
+                  name: card_holder
+                  value: "ELENA SIDOROVA"
+              - column:
+                  name: masked_number
+                  value: "**** **** **** 3333"
+              - column:
+                  name: balance
+                  value: 7500.00
+              - column:
+                  name: expiration_date
+                  value: "2026-05-31"
+              - column:
+                  name: status
+                  value: "ACTIVE"
+              - column:
+                  name: owner_id
+                  value: 3
+
+        - insert:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: card_number
+                  value: "4444444444444444"
+              - column:
+                  name: card_holder
+                  value: "PETR SMIRNOV"
+              - column:
+                  name: masked_number
+                  value: "**** **** **** 4444"
+              - column:
+                  name: balance
+                  value: 12000.00
+              - column:
+                  name: expiration_date
+                  value: "2023-11-30"
+              - column:
+                  name: status
+                  value: "EXPIRED"
+              - column:
+                  name: owner_id
+                  value: 4
+
+        - insert:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: card_number
+                  value: "4555555555555555"
+              - column:
+                  name: card_holder
+                  value: "OLGA KUZNECOVA"
+              - column:
+                  name: masked_number
+                  value: "**** **** **** 5555"
+              - column:
+                  name: balance
+                  value: 3000.00
+              - column:
+                  name: expiration_date
+                  value: "2025-08-31"
+              - column:
+                  name: status
+                  value: "BLOCKED"
+              - column:
+                  name: owner_id
+                  value: 5
