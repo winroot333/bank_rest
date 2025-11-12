@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Tag(name = "Аутентификация")
 public class ExampleController {
-    private final UserServiceImpl service;
+    private final UserService service;
 
     @GetMapping
     @Operation(summary = "Доступен только авторизованным пользователям")
@@ -28,11 +28,5 @@ public class ExampleController {
     @PreAuthorize("hasRole('ADMIN')")
     public String exampleAdmin() {
         return "Hello, admin!";
-    }
-
-    @GetMapping("/get-admin")
-    @Operation(summary = "Получить роль ADMIN (для демонстрации)")
-    public void getAdmin() {
-        service.getAdmin();
     }
 }

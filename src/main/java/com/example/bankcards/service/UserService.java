@@ -31,28 +31,4 @@ public interface UserService {
     User getById(Long userId);
 
     void delete(Long userId);
-
-    /**
-     * Получение пользователя по имени пользователя
-     *
-     * @return пользователь
-     */
-    public User getByUsername(String username);
-
-    /**
-     * Получение текущего пользователя из контекста Spring Security
-     *
-     * @return текущий пользователь
-     */
-    public User getCurrentUser();
-
-    /**
-     * Получение пользователя по имени пользователя
-     * <p>
-     * Нужен для Spring Security
-     *
-     * @return пользователь
-     */
-    public UserDetailsService userDetailsService();
-
 }

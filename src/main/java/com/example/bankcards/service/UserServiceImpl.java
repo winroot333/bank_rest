@@ -1,14 +1,13 @@
 package com.example.bankcards.service;
 
 import com.example.bankcards.entity.User;
-import com.example.bankcards.entity.enums.Role;
 import com.example.bankcards.entity.enums.UserStatus;
+import com.example.bankcards.exception.EmailAlreadyExistsException;
+import com.example.bankcards.exception.UsernameAlreadyExistsException;
 import com.example.bankcards.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,11 +23,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User create(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
-            throw new RuntimeException("Пользователь с таким именем уже существует");
+            throw new UsernameAlreadyExistsException("Пользователь с таким именем уже существует");
         }
 
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Пользователь с таким email уже существует");
+            throw new EmailAlreadyExistsException("Пользователь с таким email уже существует");
         }
 
         return save(user);
@@ -58,21 +57,4 @@ public class UserServiceImpl implements UserService {
     public void delete(Long userId) {
 
     }
-
-    @Override
-    public User getByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
-    }
-
-    @Override
-    public User getCurrentUser() {
-        return null;
-    }
-
-    @Override
-    public UserDetailsService userDetailsService() {
-        return this::getByUsername;
-    }
-
 }
