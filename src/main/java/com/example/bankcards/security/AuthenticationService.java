@@ -35,9 +35,9 @@ public class AuthenticationService {
                 .role(Role.ROLE_USER)
                 .build();
 
-        userService.create(user);
+        var createdUser = userService.create(user);
 
-        var jwt = jwtService.generateToken(user);
+        var jwt = jwtService.generateToken(createdUser);
         return new JwtAuthenticationResponse(jwt);
     }
 
