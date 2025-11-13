@@ -65,15 +65,6 @@ public interface UserService {
     User getById(Long userId);
 
     /**
-     * Получение пользователя по username
-     *
-     * @param username username пользователя
-     * @return найденный пользователь
-     * @throws UserNotFoundException если пользователь не найден
-     */
-    User getByUsername(String username);
-
-    /**
      * Удаление пользователя по ID
      *
      * @param userId ID пользователя для удаления

@@ -1,11 +1,13 @@
 package com.example.bankcards.controller;
 
-import com.example.bankcards.dto.response.JwtAuthenticationResponse;
 import com.example.bankcards.dto.request.SignInRequest;
 import com.example.bankcards.dto.request.SignUpRequest;
+import com.example.bankcards.dto.response.JwtAuthenticationResponse;
 import com.example.bankcards.service.AuthenticationServiceImpl;
 import com.example.bankcards.service.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,15 +18,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 @Tag(name = "Аутентификация")
+@ApiResponses(@ApiResponse(responseCode = "200", useReturnTypeSchema = true))
 public class AuthController {
     private final AuthenticationServiceImpl authenticationService;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Operation(summary = "Регистрация пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешная регистрация"),
+            @ApiResponse(responseCode = "400", description = "Неверные данные запроса"),
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
     @PostMapping("/sign-up")
     public JwtAuthenticationResponse signUp(@RequestBody @Valid SignUpRequest request) {
         var user = userMapper.toEntityWithEncodedPassword(request, passwordEncoder);
@@ -33,6 +42,14 @@ public class AuthController {
     }
 
     @Operation(summary = "Авторизация пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "400", description = "Неверные данные запроса"),
+            @ApiResponse(responseCode = "401", description = "Неверные учетные данные"),
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
+    @ApiResponse(responseCode = "404", description = "Пользователь не найден")
+
     @PostMapping("/sign-in")
     public JwtAuthenticationResponse signIn(@RequestBody @Valid SignInRequest request) {
         String token = authenticationService.signIn(request.getUsername(), request.getPassword());

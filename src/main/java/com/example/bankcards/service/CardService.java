@@ -15,12 +15,12 @@ public interface CardService {
     /**
      * Создание новой карты для пользователя
      *
-     * @param card   объект карты для создания
+     * @param cardHolder   Имя на карте
      * @param userId ID пользователя-владельца
      * @return созданная карта
      * @throws UserNotFoundException если пользователь не найден
      */
-    Card createCard(Card card, Long userId);
+    Card createCard(String cardHolder, Long userId);
 
     /**
      * Обновление статуса карты. Пользователь может поставить только Blocked

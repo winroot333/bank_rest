@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("@userSecurity.isOwnerOrAdmin(#userId)")
+    @PreAuthorize("@userSecurity.hasAdminRole()")
     public User updateUserStatus(Long userId, UserStatus status) {
         User user = getById(userId);
         user.setStatus(status);
@@ -56,17 +56,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("@userSecurity.isOwnerOrAdmin(#userId)")
     public User getById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() ->
                         new UserNotFoundException("Пользователь не найден с ID: " + userId));
-    }
-
-    @Override
-    public User getByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() ->
-                        new UserNotFoundException("Пользователь не найден с username: " + username));
     }
 
     @Override

@@ -104,7 +104,7 @@ databaseChangeLog:
                   value: 10000.00
               - column:
                   name: expiration_date
-                  value: "2025-12-31"
+                  value: "2025-12-30"
               - column:
                   name: status
                   value: "ACTIVE"
@@ -129,7 +129,55 @@ databaseChangeLog:
                   value: 5000.00
               - column:
                   name: expiration_date
-                  value: "2024-10-31"
+                  value: "2025-11-30"
+              - column:
+                  name: status
+                  value: "ACTIVE"
+              - column:
+                  name: owner_id
+                  value: 2
+        - insert:
+            tableName: cards
+            columns:
+              - column:
+                  name: encrypted_card_number
+                  value: "ODg4ODc1NTU3Nzc3NDQzMg=="
+              - column:
+                  name: card_holder
+                  value: "IVAN IVANOV"
+              - column:
+                  name: masked_number
+                  value: "**** **** **** 4432"
+              - column:
+                  name: balance
+                  value: 9000.00
+              - column:
+                  name: expiration_date
+                  value: "2027-10-30"
+              - column:
+                  name: status
+                  value: "ACTIVE"
+              - column:
+                  name: owner_id
+                  value: 2
+        - insert:
+            tableName: cards
+            columns:
+              - column:
+                  name: encrypted_card_number
+                  value: "ODg4ODc1NTU3Nzc3NDQxMg=="
+              - column:
+                  name: card_holder
+                  value: "IVAN IVANOV"
+              - column:
+                  name: masked_number
+                  value: "**** **** **** 4412"
+              - column:
+                  name: balance
+                  value: 12000.00
+              - column:
+                  name: expiration_date
+                  value: "2027-10-30"
               - column:
                   name: status
                   value: "ACTIVE"
@@ -154,7 +202,7 @@ databaseChangeLog:
                   value: 7500.00
               - column:
                   name: expiration_date
-                  value: "2026-05-31"
+                  value: "2026-05-30"
               - column:
                   name: status
                   value: "ACTIVE"
@@ -211,3 +259,116 @@ databaseChangeLog:
               - column:
                   name: owner_id
                   value: 5
+  - changeSet:
+      id: v2-test-data-3
+      author: Mihail
+      changes:
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: from_card_id
+                  value: 2
+              - column:
+                  name: to_card_id
+                  value: 3
+              - column:
+                  name: amount
+                  value: 1000.00
+              - column:
+                  name: transaction_date
+                  value: "2024-01-15T10:30:00"
+              - column:
+                  name: status
+                  value: "COMPLETED"
+              - column:
+                  name: description
+                  value: "Payment for services"
+
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: from_card_id
+                  value: 1
+              - column:
+                  name: to_card_id
+                  value: 2
+              - column:
+                  name: amount
+                  value: 500.00
+              - column:
+                  name: transaction_date
+                  value: "2024-01-16T14:45:00"
+              - column:
+                  name: status
+                  value: "COMPLETED"
+              - column:
+                  name: description
+                  value: "Money transfer"
+
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: from_card_id
+                  value: 3
+              - column:
+                  name: to_card_id
+                  value: 1
+              - column:
+                  name: amount
+                  value: 2000.00
+              - column:
+                  name: transaction_date
+                  value: "2024-01-17T09:15:00"
+              - column:
+                  name: status
+                  value: "PENDING"
+              - column:
+                  name: description
+                  value: "Business payment"
+
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: from_card_id
+                  value: 2
+              - column:
+                  name: to_card_id
+                  value: 1
+              - column:
+                  name: amount
+                  value: 750.50
+              - column:
+                  name: transaction_date
+                  value: "2024-01-18T16:20:00"
+              - column:
+                  name: status
+                  value: "COMPLETED"
+              - column:
+                  name: description
+                  value: "Refund"
+
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: from_card_id
+                  value: 1
+              - column:
+                  name: to_card_id
+                  value: 3
+              - column:
+                  name: amount
+                  value: 1500.00
+              - column:
+                  name: transaction_date
+                  value: "2024-01-19T11:00:00"
+              - column:
+                  name: status
+                  value: "FAILED"
+              - column:
+                  name: description
+                  value: "Insufficient funds"

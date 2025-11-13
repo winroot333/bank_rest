@@ -10,7 +10,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 
-
+/**
+ * Утилитный класс для упрощения проверок прав доступа к объектам
+ */
 @RequiredArgsConstructor
 @Component("userSecurity")
 public class UserSecurity {

@@ -5,11 +5,15 @@ import com.example.bankcards.dto.response.PageResponse;
 import com.example.bankcards.dto.response.UserResponse;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.entity.enums.UserStatus;
+import com.example.bankcards.security.UserSecurity;
 import com.example.bankcards.service.UserService;
 import com.example.bankcards.service.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -25,16 +29,17 @@ import org.springframework.data.domain.Pageable;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 @Tag(name = "Управление пользователями")
+@ApiResponses(@ApiResponse(responseCode = "200", useReturnTypeSchema = true))
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
+    private final UserSecurity userSecurity;
 
     @Operation(summary = "Получить всех пользователей (только для ADMIN)")
     @GetMapping
-    @PreAuthorize("@userSecurity.hasAdminRole()")
     public PageResponse<UserResponse> getAllUsers(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1)  int size,
             @RequestParam(required = false) UserStatus status) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("username"));
@@ -51,7 +56,6 @@ public class UserController {
 
     @Operation(summary = "Получить пользователя по ID")
     @GetMapping("/{userId}")
-    @PreAuthorize("@userSecurity.isOwnerOrAdmin(#userId)")
     public UserResponse getUser(@PathVariable Long userId) {
         User user = userService.getById(userId);
         return userMapper.toResponse(user);
@@ -59,7 +63,6 @@ public class UserController {
 
     @Operation(summary = "Изменить статус пользователя")
     @PatchMapping("/{userId}/status")
-    @PreAuthorize("@userSecurity.hasAdminRole()")
     public UserResponse updateUserStatus(
             @PathVariable Long userId,
             @RequestBody @Valid UpdateUserStatusRequest request) {
@@ -70,7 +73,6 @@ public class UserController {
 
     @Operation(summary = "Удалить пользователя")
     @DeleteMapping("/{userId}")
-    @PreAuthorize("@userSecurity.hasAdminRole()")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         userService.delete(userId);
         return ResponseEntity.noContent().build();
@@ -78,9 +80,8 @@ public class UserController {
 
     @Operation(summary = "Получить текущего пользователя")
     @GetMapping("/me")
-    public UserResponse getCurrentUser(Authentication authentication) {
-        String username = authentication.getName();
-        User user = userService.getByUsername(username);
+    public UserResponse getCurrentUser() {
+        User user = userService.getById(userSecurity.getLoggedInUserId());
         return userMapper.toResponse(user);
     }
 }

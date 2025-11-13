@@ -1,7 +1,6 @@
 package com.example.bankcards.service;
 
 import com.example.bankcards.entity.Card;
-import com.example.bankcards.entity.User;
 import com.example.bankcards.entity.enums.CardStatus;
 import com.example.bankcards.exception.CardHasBalanceException;
 import com.example.bankcards.exception.CardNotFoundException;
@@ -29,16 +28,18 @@ public class CardServiceImpl implements CardService {
 
     @Override
     @PreAuthorize("@userSecurity.isOwnerOrAdmin(#userId)")
-    public Card createCard(Card card, Long userId) {
-        User owner = userService.getById(userId);
-
+    public Card createCard(String cardHolder, Long userId) {
         String cardNumber = cardNumberUtil.generateCardNumber();
-        card.setEncryptedCardNumber(cardNumberUtil.encryptCardNumber(cardNumber));
-        card.setMaskedNumber(cardNumberUtil.maskCardNumber(cardNumber));
+        Card card = Card.builder()
+                .cardHolder(cardHolder)
+                .encryptedCardNumber(cardNumberUtil.encryptCardNumber(cardNumber))
+                .maskedNumber(cardNumberUtil.maskCardNumber(cardNumber))
+                .balance(BigDecimal.ZERO)
+                .owner(userService.getById(userId))
+                .status(CardStatus.ACTIVE)
+                .expirationDate(LocalDate.now().plusYears(CARD_EXPIRY_YEARS))
+                .build();
 
-        card.setOwner(owner);
-        card.setStatus(CardStatus.ACTIVE);
-        card.setExpirationDate(LocalDate.now().plusYears(CARD_EXPIRY_YEARS));
         return cardRepository.save(card);
     }
 
@@ -116,14 +117,10 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    @PreAuthorize("@userSecurity.isOwnerOrAdmin(#userId)")
     public boolean isCardOwnedByUser(Long cardId, Long userId) {
         return cardRepository.findByIdAndOwnerId(cardId, userId).isPresent();
     }
-
-//    @Override
-//    public Card save(Card card) {
-//        return cardRepository.save(card);
-//    }
 
     @Override
     @PreAuthorize("@userSecurity.isCardOwnerOrAdmin(#cardId)")

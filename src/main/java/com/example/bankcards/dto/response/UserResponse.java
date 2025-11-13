@@ -4,7 +4,6 @@ import com.example.bankcards.entity.enums.Role;
 import com.example.bankcards.entity.enums.UserStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
 

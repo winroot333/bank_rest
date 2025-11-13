@@ -22,6 +22,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    open-in-view: false
   liquibase:
     enabled: true
     change-log: classpath:db/migration/changelog-master.yaml
@@ -36,6 +37,9 @@ springdoc:
   swagger-ui:
 #    url: /docs/openapi.yaml
 #    path: /swagger-ui.html
+    show-common-extensions: true
+  api-docs:
+    path: /api-docs/api-docs.yaml
 
 server:
   port: 8080
