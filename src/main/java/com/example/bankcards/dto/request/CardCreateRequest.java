@@ -10,12 +10,6 @@ import java.time.LocalDate;
 @Schema(description = "Запрос на создание карты")
 public class CardCreateRequest {
 
-    @Schema(description = "Номер карты", example = "1234567812345678")
-    @Size(min = 16, max = 19, message = "Номер карты должен содержать от 16 до 19 символов")
-    @NotBlank(message = "Номер карты не может быть пустым")
-    @Pattern(regexp = "^[0-9]+$", message = "Номер карты должен содержать только цифры")
-    private String cardNumber;
-
     @Schema(description = "Держатель карты", example = "IVAN IVANOV")
     @Size(min = 2, max = 100, message = "Имя держателя карты должно содержать от 2 до 100 символов")
     @NotBlank(message = "Имя держателя карты не может быть пустым")
