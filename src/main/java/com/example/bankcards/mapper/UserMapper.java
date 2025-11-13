@@ -4,10 +4,7 @@ import com.example.bankcards.dto.request.SignUpRequest;
 import com.example.bankcards.dto.response.PageResponse;
 import com.example.bankcards.dto.response.UserResponse;
 import com.example.bankcards.entity.User;
-import org.mapstruct.Context;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,7 +15,8 @@ import java.util.List;
 /**
  * Мэппер для преобразования Сущностей пользователей в ДТО
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
     UserResponse toResponse(User user);
 
