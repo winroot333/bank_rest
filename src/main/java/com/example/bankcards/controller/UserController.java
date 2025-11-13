@@ -87,7 +87,7 @@ public class UserController {
 
     @Operation(summary = "Удалить пользователя")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Пользователь успешно удален"),
+            @ApiResponse(responseCode = "200", description = "Пользователь успешно удален"),
             @ApiResponse(responseCode = "404", description = "Пользователь не найден"),
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
     })

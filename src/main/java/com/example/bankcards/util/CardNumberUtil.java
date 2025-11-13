@@ -2,7 +2,6 @@ package com.example.bankcards.util;
 
 import com.example.bankcards.exception.CardEncryptionException;
 import com.example.bankcards.exception.InvalidCardNumberException;
-import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
@@ -14,8 +13,8 @@ import java.util.Random;
  */
 @Service
 public class CardNumberUtil {
-    private final Random RANDOM = new Random();
     private static final String MASKED_NUMBER_PREFIX = "**** **** **** ";
+    private final Random RANDOM = new Random();
 
     /**
      * Маскирует номер карты, оставляя видимыми только первые 6 и последние 4 цифры
@@ -47,6 +46,7 @@ public class CardNumberUtil {
 
     /**
      * Простое шифрование номера карты
+     *
      * @param cardNumber номер карты
      * @return зашифрованный номер карты
      */
@@ -60,6 +60,7 @@ public class CardNumberUtil {
 
     /**
      * Простая расшифровка номера карты
+     *
      * @param encryptedCardNumber зашиврованный номер карты
      * @return расшифрованный номер карты
      */

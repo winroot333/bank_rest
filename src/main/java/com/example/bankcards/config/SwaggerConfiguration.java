@@ -1,10 +1,14 @@
 package com.example.bankcards.config;
 
 import com.example.bankcards.dto.response.ErrorResponse;
+import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.customizers.OpenApiCustomizer;
@@ -23,7 +27,7 @@ public class SwaggerConfiguration {
                 .info(new Info()
                         .title("Bank Rest")
                         .version("1.0")
-                        .description("API Documentation with JWT authentication"))
+                        .description("Приложения для управления пользователями и картами с JWT авторизацией"))
                 .addSecurityItem(new SecurityRequirement().addList("JWT"))
                 .components(new Components()
                         .addSecuritySchemes("JWT", new SecurityScheme()
@@ -34,28 +38,43 @@ public class SwaggerConfiguration {
                                 .in(SecurityScheme.In.HEADER)));
     }
 
+
     /**
-     * Добавляем автоматически тело в документацию ко всем ошибкам
+     * Метод для добавления ErrorResponse тела ошибок по умолчанию.
+     * Чтобы не указывать вручную каждый раз, а так без тела   @ApiResponse(responseCode = "400", description = "Неверные данные запроса"),
      */
     @Bean
-    public OpenApiCustomizer openApiCustomizer() {
+    public OpenApiCustomizer forceErrorResponseSchema() {
         return openApi -> {
-            //Получаем схему ошибки
-            var sharedErrorSchema = ModelConverters.getInstance()
-                    .read(ErrorResponse.class).get(ErrorResponse.class.getSimpleName());
-            if (sharedErrorSchema == null) {
-                throw new IllegalStateException(
-                        "Не удалось сгенерировать ответ для ошибок 4xx и 5xx, поскольку отсутствует схема ошибки");
-            }
+            // Регистрируем схему ErrorResponse
+            var resolvedSchema = ModelConverters.getInstance()
+                    .resolveAsResolvedSchema(new AnnotatedType(ErrorResponse.class));
 
-            //Добавляем тело ответа ко всем ответам с кодами 4xx и 5xx
-            openApi.getPaths().values().forEach(pathItem -> pathItem.readOperations().forEach(operation ->
-                    operation.getResponses().forEach((status, response) -> {
-                        if (status.startsWith("4") || status.startsWith("5")) {
-                            response.getContent().forEach((code, mediaType) -> mediaType.setSchema(sharedErrorSchema));
-                        }
-                    })));
+            if (resolvedSchema == null || resolvedSchema.schema == null) return;
+
+            openApi.getComponents().addSchemas("ErrorResponse", resolvedSchema.schema);
+
+            Schema<?> errorSchemaRef = new Schema<>();
+            errorSchemaRef.set$ref("#/components/schemas/ErrorResponse");
+
+            openApi.getPaths().values().forEach(pathItem ->
+                    pathItem.readOperations().forEach(operation ->
+                            operation.getResponses().forEach((status, response) -> {
+                                if (status.startsWith("4") || status.startsWith("5")) {
+                                    // Всегда создаем новый контент для ошибок
+                                    Content content = new Content();
+                                    MediaType mediaType = new MediaType();
+                                    mediaType.setSchema(errorSchemaRef);
+                                    content.addMediaType("application/json", mediaType);
+
+                                    response.setContent(content);
+                                }
+                            })
+                    )
+            );
         };
     }
+
+
 }
 

@@ -19,11 +19,9 @@ public class ExceptionHandlingAdvice {
 
 
     @ExceptionHandler({IllegalArgumentException.class,
-            MethodArgumentNotValidException.class, InvalidCardNumberException.class,
+            MethodArgumentNotValidException.class,
             EmailAlreadyExistsException.class, UsernameAlreadyExistsException.class,
-            CardExpiredException.class, CardBlockedException.class,
-            CardHasBalanceException.class, InvalidAmountException.class,
-            InsufficientFundsException.class
+            InvalidAmountException.class, InsufficientFundsException.class
     })
     public ResponseEntity<ErrorResponse> handleBadRequest(Exception e) {
         return createErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -41,7 +39,9 @@ public class ExceptionHandlingAdvice {
     }
 
     @ExceptionHandler({AccessDeniedException.class, UnauthorizedTransferException.class,
-    UnauthorizedStatusChangeException.class})
+    UnauthorizedStatusChangeException.class, UserHasCardsException.class,
+            CardExpiredException.class, CardBlockedException.class,
+            CardHasBalanceException.class })
     public ResponseEntity<ErrorResponse> handleForbidden(AccessDeniedException e) {
         return createErrorResponse(HttpStatus.FORBIDDEN, e.getMessage());
     }

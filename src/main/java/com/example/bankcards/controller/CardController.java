@@ -129,7 +129,7 @@ public class CardController {
 
     @Operation(summary = "Удалить карту")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Карта успешно удалена"),
+            @ApiResponse(responseCode = "200", description = "Карта успешно удалена"),
             @ApiResponse(responseCode = "403", description = "Доступ запрещен"),
             @ApiResponse(responseCode = "404", description = "Карта не найдена"),
             @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")

@@ -2,10 +2,9 @@ package com.example.bankcards.service;
 
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.Transaction;
+import com.example.bankcards.entity.enums.CardStatus;
 import com.example.bankcards.entity.enums.TransactionStatus;
-import com.example.bankcards.exception.InsufficientFundsException;
-import com.example.bankcards.exception.InvalidAmountException;
-import com.example.bankcards.exception.UnauthorizedTransferException;
+import com.example.bankcards.exception.*;
 import com.example.bankcards.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +46,14 @@ public class TransactionServiceImpl implements TransactionService {
             throw new InsufficientFundsException("Недостаточно средств на карте отправителя");
         }
 
+        if (fromCard.getStatus().equals(CardStatus.EXPIRED) || toCard.getStatus().equals(CardStatus.EXPIRED)) {
+            throw new CardExpiredException("Переводы с истекшими картами невозможны");
+        }
+
+        if (fromCard.getStatus().equals(CardStatus.BLOCKED) || toCard.getStatus().equals(CardStatus.BLOCKED)) {
+            throw new CardBlockedException("Переводы с заблокированными картами невозможны");
+        }
+
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new InvalidAmountException("Сумма перевода должна быть положительной");
         }
@@ -63,10 +70,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .description(description)
                 .build();
 
-        var savedTransaction = transactionRepository.save(transaction);
-        savedTransaction.getId();
-        return savedTransaction;
-
+        return transactionRepository.save(transaction);
     }
 
     @Override

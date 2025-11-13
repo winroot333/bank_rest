@@ -3,12 +3,16 @@ package com.example.bankcards.service;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.entity.enums.UserStatus;
 import com.example.bankcards.exception.EmailAlreadyExistsException;
+import com.example.bankcards.exception.UserHasCardsException;
 import com.example.bankcards.exception.UserNotFoundException;
 import com.example.bankcards.exception.UsernameAlreadyExistsException;
+import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final CardRepository cardRepository;
 
     @Override
     public User save(User user) {
@@ -64,11 +69,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("@userSecurity.isOwnerOrAdmin(#userId)")
+    @PreAuthorize("@userSecurity.hasAdminRole()")
     public void delete(Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new UserNotFoundException("Пользователь не найден с ID: " + userId);
         }
+
+        Pageable pageable = PageRequest.of(0, 1, Sort.by("id").descending());
+        if (cardRepository.findByOwnerId(userId, pageable).getTotalElements() > 0) {
+            throw new UserHasCardsException("У пользователя есть карты, невозможно удалить");
+        }
+
         userRepository.deleteById(userId);
     }
 }
