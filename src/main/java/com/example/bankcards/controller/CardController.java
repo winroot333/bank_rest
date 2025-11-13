@@ -5,9 +5,9 @@ import com.example.bankcards.dto.response.CardResponse;
 import com.example.bankcards.dto.response.PageResponse;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.enums.CardStatus;
+import com.example.bankcards.mapper.CardMapper;
 import com.example.bankcards.security.UserSecurity;
 import com.example.bankcards.service.CardService;
-import com.example.bankcards.service.mapper.CardMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -20,7 +20,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,14 +34,26 @@ public class CardController {
 
 
     @Operation(summary = "Создать новую карту")
-
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Карта успешно создана"),
+            @ApiResponse(responseCode = "400", description = "Неверные данные запроса"),
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
     @PostMapping
     public CardResponse createCard(@RequestBody @Valid CardCreateRequest request) {
         Card createdCard = cardService.createCard(request.getCardHolder(), userSecurity.getLoggedInUserId());
         return cardMapper.toResponse(createdCard);
     }
 
+
     @Operation(summary = "Получить карту по ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Карта успешно получена"),
+            @ApiResponse(responseCode = "403", description = "Доступ запрещен"),
+            @ApiResponse(responseCode = "404", description = "Карта не найдена"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
     @GetMapping("/{cardId}")
     public CardResponse getCard(@PathVariable Long cardId) {
         Card card = cardService.getCardById(cardId);
@@ -50,6 +61,12 @@ public class CardController {
     }
 
     @Operation(summary = "Получить все карты пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Карты пользователя успешно получены"),
+            @ApiResponse(responseCode = "403", description = "Доступ запрещен"),
+            @ApiResponse(responseCode = "404", description = "Пользователь не найден"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
     @GetMapping("/user/{userId}")
     public PageResponse<CardResponse> getUserCards(
             @PathVariable Long userId,
@@ -70,6 +87,11 @@ public class CardController {
     }
 
     @Operation(summary = "Получить все карты (только для ADMIN)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Все карты успешно получены"),
+            @ApiResponse(responseCode = "403", description = "Доступ запрещен"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
     @GetMapping
     public PageResponse<CardResponse> getAllCards(
             @RequestParam(defaultValue = "0") @Min(0) int page,
@@ -89,6 +111,13 @@ public class CardController {
     }
 
     @Operation(summary = "Изменить статус карты")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Статус карты успешно изменен"),
+            @ApiResponse(responseCode = "400", description = "Неверные данные запроса"),
+            @ApiResponse(responseCode = "403", description = "Доступ запрещен"),
+            @ApiResponse(responseCode = "404", description = "Карта не найдена"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
     @PatchMapping("/{cardId}/status")
     public CardResponse updateCardStatus(
             @PathVariable Long cardId,
@@ -99,6 +128,12 @@ public class CardController {
     }
 
     @Operation(summary = "Удалить карту")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Карта успешно удалена"),
+            @ApiResponse(responseCode = "403", description = "Доступ запрещен"),
+            @ApiResponse(responseCode = "404", description = "Карта не найдена"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
     @DeleteMapping("/{cardId}")
     public ResponseEntity<Void> deleteCard(
             @PathVariable Long cardId,

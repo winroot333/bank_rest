@@ -3,12 +3,15 @@ package com.example.bankcards.service;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.enums.CardStatus;
 import com.example.bankcards.exception.CardHasBalanceException;
+import com.example.bankcards.exception.CardHasTransactionsException;
 import com.example.bankcards.exception.CardNotFoundException;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.util.CardNumberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,7 @@ public class CardServiceImpl implements CardService {
     private final CardRepository cardRepository;
     private final UserService userService;
     private final CardNumberUtil cardNumberUtil;
+    private final TransactionService transactionService;
 
     @Override
     @PreAuthorize("@userSecurity.isOwnerOrAdmin(#userId)")
@@ -111,6 +115,12 @@ public class CardServiceImpl implements CardService {
 
         if (card.getBalance().compareTo(BigDecimal.ZERO) > 0) {
             throw new CardHasBalanceException("Нельзя удалить карту с положительным балансом");
+        }
+
+        Pageable pageable = PageRequest.of(0, 1, Sort.by("transactionDate").descending());
+        var transactions = transactionService.getCardTransactions(cardId, pageable);
+        if (!transactions.isEmpty()) {
+            throw new CardHasTransactionsException("Нельзя удалить карту с существующими транзакциями");
         }
 
         cardRepository.delete(card);
