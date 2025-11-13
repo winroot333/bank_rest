@@ -91,8 +91,8 @@ databaseChangeLog:
             tableName: cards
             columns:
               - column:
-                  name: card_number
-                  value: "4111111111111111"
+                  name: encrypted_card_number
+                  value: "MTIzNDU2Nzg6cXdlYXNkenhj"
               - column:
                   name: card_holder
                   value: "MIHAIL PETROV"
@@ -116,8 +116,8 @@ databaseChangeLog:
             tableName: cards
             columns:
               - column:
-                  name: card_number
-                  value: "4222222222222222"
+                  name: encrypted_card_number
+                  value: "NDU2Nzg5MDEyOnNkZmdoamts"
               - column:
                   name: card_holder
                   value: "IVAN IVANOV"
@@ -141,8 +141,8 @@ databaseChangeLog:
             tableName: cards
             columns:
               - column:
-                  name: card_number
-                  value: "4333333333333333"
+                  name: encrypted_card_number
+                  value: "Nzg5MDEyMzQ1OmFzZGZnaGprbA=="
               - column:
                   name: card_holder
                   value: "ELENA SIDOROVA"
@@ -166,8 +166,8 @@ databaseChangeLog:
             tableName: cards
             columns:
               - column:
-                  name: card_number
-                  value: "4444444444444444"
+                  name: encrypted_card_number
+                  value: "MDEyMzQ1Njc4OmxramZkc2F6eA=="
               - column:
                   name: card_holder
                   value: "PETR SMIRNOV"
@@ -191,8 +191,8 @@ databaseChangeLog:
             tableName: cards
             columns:
               - column:
-                  name: card_number
-                  value: "4555555555555555"
+                  name: encrypted_card_number
+                  value: "MzQ1Njc4OTAxOnBvaWxramZkc2E="
               - column:
                   name: card_holder
                   value: "OLGA KUZNECOVA"

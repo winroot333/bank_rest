@@ -61,12 +61,11 @@ databaseChangeLog:
                     nullable: false
                   remarks: "Auto-generated unique ID"
               - column:
-                  name: card_number
-                  type: varchar(16)
+                  name: encrypted_card_number
+                  type: text
                   constraints:
                     nullable: false
-                    unique: true
-                  remarks: "16 digit card number"
+                  remarks: "Encrypted card number"
 
               - column:
                   name: card_holder

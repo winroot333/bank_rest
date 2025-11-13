@@ -13,7 +13,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 /**
  * Advice для централизованной обработки исключений и возвращения ошибок по кодам
  */
-@RestControllerAdvice
+//@RestControllerAdvice
 public class ExceptionHandlingAdvice {
     @ExceptionHandler({IllegalArgumentException.class,
             MethodArgumentNotValidException.class,

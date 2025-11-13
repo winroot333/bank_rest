@@ -15,26 +15,31 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CardRepository extends JpaRepository<Card, Long> {
-    /**
-     * Найти карту по номеру (для проверки уникальности)
-     * @param cardNumber Номер карты
-     */
-    Optional<Card> findByCardNumber(String cardNumber);
 
     /**
      * Найти все карты пользователя с пагинацией
-     * @param ownerId Id пользователя
+     *
+     * @param ownerId  Id пользователя
      * @param pageable Пагинация
      */
-    Page<Card> findAllByOwnerId(Long ownerId, Pageable pageable);
+    Page<Card> findByOwnerId(Long ownerId, Pageable pageable);
+
+    /**
+     * Найти все карты пользователя с пагинацией
+     *
+     * @param status   status карты
+     * @param pageable Пагинация
+     */
+    Page<Card> findAllByStatus(CardStatus status, Pageable pageable);
 
     /**
      * Найти карты пользователя со статусом
-     * @param ownerId Id пользователя
-     * @param status Статус
+     *
+     * @param ownerId  Id пользователя
+     * @param status   Статус
+     * @param pageable Пагинация
      */
-    //
-    List<Card> findByOwnerIdAndStatus(Long ownerId, CardStatus status);
+    Page<Card> findByOwnerIdAndStatus(Long ownerId, CardStatus status, Pageable pageable);
 
     // Найти карты по статусу и дате истечения
     List<Card> findByStatusAndExpirationDateBefore(CardStatus status, LocalDate date);
@@ -44,8 +49,8 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     @Query("UPDATE Card c SET c.balance = c.balance + :amount WHERE c.id = :id")
     void updateBalance(@Param("id") Long id, @Param("amount") BigDecimal amount);
 
-    // Поиск карт по диапазону баланса
-    @Query("SELECT c FROM Card c WHERE c.owner.id = :ownerId AND c.balance BETWEEN :min AND :max")
-    List<Card> findByBalanceBetween(
+    List<Card> findByOwnerIdAndBalanceBetween(
             @Param("ownerId") Long ownerId, @Param("min") BigDecimal min, @Param("max") BigDecimal max);
+
+    Optional<Card> findByIdAndOwnerId(Long cardId, Long userId);
 }

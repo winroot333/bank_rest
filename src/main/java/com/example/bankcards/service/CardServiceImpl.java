@@ -1,4 +1,136 @@
 package com.example.bankcards.service;
 
+import com.example.bankcards.entity.Card;
+import com.example.bankcards.entity.User;
+import com.example.bankcards.entity.enums.CardStatus;
+import com.example.bankcards.exception.CardHasBalanceException;
+import com.example.bankcards.exception.CardNotFoundException;
+import com.example.bankcards.repository.CardRepository;
+import com.example.bankcards.util.CardNumberUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+/**
+ * Имплементация сервиса для работы с картами
+ */
+@Service
+@RequiredArgsConstructor
 public class CardServiceImpl implements CardService {
+    private static final int CARD_EXPIRY_YEARS = 3;
+    private final CardRepository cardRepository;
+    private final UserService userService;
+    private final CardNumberUtil cardNumberUtil;
+
+    @Override
+    @PreAuthorize("@userSecurity.isOwnerOrAdmin(#userId)")
+    public Card createCard(Card card, Long userId) {
+        User owner = userService.getById(userId);
+
+        String cardNumber = cardNumberUtil.generateCardNumber();
+        card.setEncryptedCardNumber(cardNumberUtil.encryptCardNumber(cardNumber));
+        card.setMaskedNumber(cardNumberUtil.maskCardNumber(cardNumber));
+
+        card.setOwner(owner);
+        card.setStatus(CardStatus.ACTIVE);
+        card.setExpirationDate(LocalDate.now().plusYears(CARD_EXPIRY_YEARS));
+        return cardRepository.save(card);
+    }
+
+    @Override
+    @PreAuthorize("@userSecurity.isCardOwnerOrAdmin(#cardId)")
+    public Card updateCardStatus(Long cardId, CardStatus status) {
+        Card card = getCardById(cardId);
+
+        if (status == CardStatus.BLOCKED) {
+            card.setStatus(status);
+            return cardRepository.save(card);
+        } else {
+            return updateCardStatusByAdmin(cardId, status);
+        }
+    }
+
+    @Override
+    @PreAuthorize("@userSecurity.hasAdminRole()")
+    public Card updateCardStatusByAdmin(Long cardId, CardStatus status) {
+        Card card = getCardById(cardId);
+        card.setStatus(status);
+        return cardRepository.save(card);
+    }
+
+    @Override
+    @PreAuthorize("@userSecurity.isCardOwnerOrAdmin(#cardId)")
+    public Card updateCardBalance(Long cardId, BigDecimal balance) {
+        Card card = getCardById(cardId);
+        card.setBalance(balance);
+        return cardRepository.save(card);
+    }
+
+    @Override
+    @PreAuthorize("@userSecurity.isOwnerOrAdmin(#userId)")
+    public Card getCardByIdAndOwner(Long cardId, Long userId) {
+        return cardRepository.findByIdAndOwnerId(cardId, userId)
+                .orElseThrow(() -> new CardNotFoundException("Карта не найдена или нет доступа"));
+    }
+
+    @Override
+    @PreAuthorize("@userSecurity.isOwnerOrAdmin(#userId)")
+    public Page<Card> getAllUserCards(Long userId, Pageable pageable) {
+        return cardRepository.findByOwnerId(userId, pageable);
+    }
+
+    @Override
+    @PreAuthorize("@userSecurity.hasAdminRole()")
+    public Page<Card> getAllCards(Pageable pageable) {
+        return cardRepository.findAll(pageable);
+    }
+
+    @Override
+    @PreAuthorize("@userSecurity.hasAdminRole()")
+    public Page<Card> getCardsByStatus(CardStatus status, Pageable pageable) {
+        return cardRepository.findAllByStatus(status, pageable);
+    }
+
+
+    @Override
+    @PreAuthorize("@userSecurity.isOwnerOrAdmin(#userId)")
+    public Page<Card> getUserCardsByStatus(Long userId, CardStatus status, Pageable pageable) {
+        return cardRepository.findByOwnerIdAndStatus(userId, status, pageable);
+    }
+
+    @Override
+    @PreAuthorize("@userSecurity.hasAdminRole()")
+    public void deleteCard(Long cardId, Long userId) {
+        Card card = getCardByIdAndOwner(cardId, userId);
+
+        if (card.getBalance().compareTo(BigDecimal.ZERO) > 0) {
+            throw new CardHasBalanceException("Нельзя удалить карту с положительным балансом");
+        }
+
+        cardRepository.delete(card);
+    }
+
+    @Override
+    public boolean isCardOwnedByUser(Long cardId, Long userId) {
+        return cardRepository.findByIdAndOwnerId(cardId, userId).isPresent();
+    }
+
+//    @Override
+//    public Card save(Card card) {
+//        return cardRepository.save(card);
+//    }
+
+    @Override
+    @PreAuthorize("@userSecurity.isCardOwnerOrAdmin(#cardId)")
+    public Card getCardById(Long cardId) {
+        return cardRepository.findById(cardId)
+                .orElseThrow(() -> new CardNotFoundException("Карта не найдена с ID: " + cardId));
+    }
+
+
 }

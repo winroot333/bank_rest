@@ -3,6 +3,7 @@ package com.example.bankcards.util;
 import com.example.bankcards.exception.CardEncryptionException;
 import com.example.bankcards.exception.InvalidCardNumberException;
 import lombok.experimental.UtilityClass;
+import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 import java.util.Random;
@@ -11,9 +12,10 @@ import java.util.Random;
 /**
  * Утилитный класс для работы с номером карты
  */
-@UtilityClass
+@Service
 public class CardNumberUtil {
-    private static final Random RANDOM = new Random();
+    private final Random RANDOM = new Random();
+    private static final String MASKED_NUMBER_PREFIX = "**** **** **** ";
 
     /**
      * Маскирует номер карты, оставляя видимыми только первые 6 и последние 4 цифры
@@ -25,9 +27,9 @@ public class CardNumberUtil {
         if (!validateCardNumber(cardNumber)) {
             throw new InvalidCardNumberException("Неверный формат карты");
         }
-        String firstSix = cardNumber.substring(0, 6);
         String lastFour = cardNumber.substring(12);
-        return firstSix + "******" + lastFour;
+
+        return MASKED_NUMBER_PREFIX + lastFour;
     }
 
     /**

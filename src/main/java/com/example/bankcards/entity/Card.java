@@ -25,12 +25,10 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "card_number", length = 16, nullable = false, updatable = false, unique = true)
-    @Size(min = 16, max = 16, message = "Card number must be 16 digits")
-    @Pattern(regexp = "^[0-9]{16}$", message = "Card number must contain only digits")
-    private String cardNumber;
+    @Column(name = "encrypted_card_number", nullable = false, columnDefinition = "TEXT")
+    private String encryptedCardNumber;
 
-    @Column(name = "masked_number", length = 16, nullable = false, updatable = false)
+    @Column(name = "masked_number", length = 19, nullable = false, updatable = false)
     private String maskedNumber;
 
     @Column(name = "card_holder", length = 100, nullable = false)
@@ -38,7 +36,6 @@ public class Card {
     private String cardHolder;
 
     @Column(name = "expiration_date", nullable = false)
-    @Future(message = "Expiration date must be in the future")
     private LocalDate expirationDate;
 
     @Enumerated(EnumType.STRING)
