@@ -44,15 +44,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("@userSecurity.hasAdminRole()")
     public Page<User> getAll(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
 
     @Override
+    @PreAuthorize("@userSecurity.hasAdminRole()")
     public Page<User> getByStatus(UserStatus status, Pageable pageable) {
-//todo сделать метод
-        //        return userRepository.findByStatus(status, pageable);
-        return null;
+        return userRepository.findByStatus(status, pageable);
     }
 
     @Override
@@ -60,6 +60,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(userId)
                 .orElseThrow(() ->
                         new UserNotFoundException("Пользователь не найден с ID: " + userId));
+    }
+
+    @Override
+    public User getByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() ->
+                        new UserNotFoundException("Пользователь не найден с username: " + username));
     }
 
     @Override

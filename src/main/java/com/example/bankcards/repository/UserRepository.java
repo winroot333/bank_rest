@@ -32,4 +32,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
      */
     boolean existsByEmail(String email);
 
+    /**
+     * Получение пользователей по статусу
+     * @param status статус
+     * @param pageable пагинация
+     * @return Список пользователей с нужным статусом
+     */
+    Page<User> findByStatus(UserStatus status, Pageable pageable);
+
 }
