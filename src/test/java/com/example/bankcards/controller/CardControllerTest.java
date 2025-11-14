@@ -7,7 +7,6 @@ import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.entity.enums.CardStatus;
 import com.example.bankcards.exception.CardNotFoundException;
-import com.example.bankcards.exception.UserNotFoundException;
 import com.example.bankcards.mapper.CardMapper;
 import com.example.bankcards.security.JwtService;
 import com.example.bankcards.security.UserSecurity;
@@ -34,8 +33,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -58,7 +55,7 @@ class CardControllerTest {
     private JwtService jwtService;
     @MockitoBean
     private CardNumberUtil cardNumberUtil;
-    
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -257,7 +254,7 @@ class CardControllerTest {
                 new BigDecimal("0.00")
         );
 
-        when(cardService.updateCardStatus(1L, CardStatus.BLOCKED)).thenReturn(updatedCard);
+        when(cardService.updateCardStatusByAdmin(1L, CardStatus.BLOCKED)).thenReturn(updatedCard);
         when(cardMapper.toResponse(updatedCard)).thenReturn(updatedResponse);
 
         mockMvc.perform(patch("/api/cards/1/status")
@@ -266,13 +263,13 @@ class CardControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("BLOCKED"));
 
-        verify(cardService, times(1)).updateCardStatus(1L, CardStatus.BLOCKED);
+        verify(cardService, times(1)).updateCardStatusByAdmin(1L, CardStatus.BLOCKED);
     }
 
     @DisplayName("PATCH /api/cards/{cardId}/status Должен вернуть 404 когда карта не найдена")
     @Test
     void updateCardStatus_WhenCardNotFound_ShouldReturnNotFound() throws Exception {
-        when(cardService.updateCardStatus(1L, CardStatus.BLOCKED))
+        when(cardService.updateCardStatusByAdmin(1L, CardStatus.BLOCKED))
                 .thenThrow(new CardNotFoundException("Карта не найдена"));
 
         mockMvc.perform(patch("/api/cards/1/status")
@@ -280,6 +277,36 @@ class CardControllerTest {
                         .content("\"BLOCKED\""))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error").value("Карта не найдена"));
+    }
+
+    @DisplayName("PATCH /api/users/cards/{cardId}/block Должен успешно блокировать карту")
+    @Test
+    void blockCard_ShouldBlockCard() throws Exception {
+
+        Card blockedCard = Card.builder()
+                .id(1L)
+                .encryptedCardNumber("MTIzNDU2NzgxMjM0NTY3OA==")
+                .maskedNumber("**** **** **** 5678")
+                .cardHolder("IVAN IVANOV")
+                .expirationDate(LocalDate.now().plusYears(3))
+                .balance(new BigDecimal("0.00"))
+                .status(CardStatus.BLOCKED)
+                .owner(user)
+                .build();
+
+        CardResponse cardResponse = new CardResponse(1L, "**** **** **** 5678", "MTIzNDU2NzgxMjM0NTY3OA==",
+                LocalDate.now().plusYears(3), CardStatus.BLOCKED, new BigDecimal("0.00"));
+
+        when(cardService.blockCard(1L)).thenReturn(blockedCard);
+        when(cardMapper.toResponse(blockedCard)).thenReturn(cardResponse);
+
+        mockMvc.perform(patch("/api/cards/1/block"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.maskedNumber").value("**** **** **** 5678"))
+                .andExpect(jsonPath("$.status").value("BLOCKED"));
+
+        verify(cardService, times(1)).blockCard(1L);
     }
 
     @DisplayName("DELETE /api/cards/{cardId} Должен успешно удалить карту")

@@ -7,7 +7,7 @@ servers:
   - url: http://localhost:8080
     description: Generated server url
 security:
-  - JWT: []
+  - JWT: [ ]
 paths:
   /api/transactions/transfer:
     post:
@@ -267,7 +267,7 @@ paths:
     patch:
       tags:
         - Управление картами
-      summary: Изменить статус карты
+      summary: "Изменить статус карты, для админа"
       operationId: updateCardStatus
       parameters:
         - name: cardId
@@ -286,6 +286,50 @@ paths:
                 - BLOCKED
                 - EXPIRED
         required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CardResponse"
+        "400":
+          description: Неверные данные запроса
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Доступ запрещен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Карта не найдена
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Внутренняя ошибка сервера
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/cards/{cardId}/block:
+    patch:
+      tags:
+        - Управление картами
+      summary: "Заблокировать карту, для пользователя"
+      operationId: blockCard
+      parameters:
+        - name: cardId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
         "200":
           description: OK
@@ -940,6 +984,10 @@ components:
           type: string
           description: Имя пользователя
           example: jon_doe
+        email:
+          type: string
+          description: Email пользователя
+          example: jon.doe@example.com
         role:
           type: string
           description: Роль пользователя

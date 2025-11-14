@@ -50,15 +50,11 @@ public class CardServiceImpl implements CardService {
 
     @Override
     @PreAuthorize("@userSecurity.isCardOwnerOrAdmin(#cardId)")
-    public Card updateCardStatus(Long cardId, CardStatus status) {
+    public Card blockCard(Long cardId) {
         Card card = getCardById(cardId);
 
-        if (status == CardStatus.BLOCKED) {
-            card.setStatus(status);
-            return cardRepository.save(card);
-        } else {
-            return updateCardStatusByAdmin(cardId, status);
-        }
+        card.setStatus(CardStatus.BLOCKED);
+        return cardRepository.save(card);
     }
 
     @Override

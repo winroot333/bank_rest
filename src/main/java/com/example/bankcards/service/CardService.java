@@ -23,17 +23,7 @@ public interface CardService {
     Card createCard(String cardHolder, Long userId);
 
     /**
-     * Обновление статуса карты. Пользователь может поставить только Blocked
-     *
-     * @param cardId ID карты
-     * @param status новый статус карты
-     * @return обновленная карта
-     * @throws CardNotFoundException если карта не найдена
-     */
-    Card updateCardStatus(Long cardId, CardStatus status);
-
-    /**
-     * Обновление статуса карты для админа. Может поставить любой статус
+     * Обновление статуса карты для Админа. Можно поставить любой статус
      *
      * @param cardId ID карты
      * @param status новый статус карты
@@ -41,6 +31,15 @@ public interface CardService {
      * @throws CardNotFoundException если карта не найдена
      */
     Card updateCardStatusByAdmin(Long cardId, CardStatus status);
+
+    /**
+     * Блокирование карты для пользователя
+     *
+     * @param cardId ID карты
+     * @return обновленная карта
+     * @throws CardNotFoundException если карта не найдена
+     */
+    Card blockCard(Long cardId);
 
     /**
      * Обновление баланса карты

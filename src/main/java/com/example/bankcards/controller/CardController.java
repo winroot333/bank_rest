@@ -110,7 +110,7 @@ public class CardController {
         return cardMapper.toPageResponse(cardsPage);
     }
 
-    @Operation(summary = "Изменить статус карты")
+    @Operation(summary = "Изменить статус карты, для админа")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Статус карты успешно изменен"),
             @ApiResponse(responseCode = "400", description = "Неверные данные запроса"),
@@ -123,7 +123,23 @@ public class CardController {
             @PathVariable Long cardId,
             @RequestBody @Valid CardStatus status) {
 
-        Card updatedCard = cardService.updateCardStatus(cardId, status);
+        Card updatedCard = cardService.updateCardStatusByAdmin(cardId, status);
+        return cardMapper.toResponse(updatedCard);
+    }
+
+    @Operation(summary = "Заблокировать карту, для пользователя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Карта успешно заблокирована"),
+            @ApiResponse(responseCode = "400", description = "Неверные данные запроса"),
+            @ApiResponse(responseCode = "403", description = "Доступ запрещен"),
+            @ApiResponse(responseCode = "404", description = "Карта не найдена"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
+    @PatchMapping("/{cardId}/block")
+    public CardResponse blockCard(
+            @PathVariable Long cardId) {
+
+        Card updatedCard = cardService.blockCard(cardId);
         return cardMapper.toResponse(updatedCard);
     }
 
