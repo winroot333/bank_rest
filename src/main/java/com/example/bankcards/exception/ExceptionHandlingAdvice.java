@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 /**
@@ -18,10 +19,9 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 public class ExceptionHandlingAdvice {
 
 
-    @ExceptionHandler({IllegalArgumentException.class,
-            MethodArgumentNotValidException.class,
+    @ExceptionHandler({IllegalArgumentException.class,MethodArgumentNotValidException.class,
             EmailAlreadyExistsException.class, UsernameAlreadyExistsException.class,
-            InvalidAmountException.class, InsufficientFundsException.class
+            InvalidAmountException.class, InsufficientFundsException.class, HandlerMethodValidationException.class
     })
     public ResponseEntity<ErrorResponse> handleBadRequest(Exception e) {
         return createErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());

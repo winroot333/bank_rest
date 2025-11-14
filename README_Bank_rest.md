@@ -11,11 +11,11 @@ Postgres в контейнере:
 
 Запуск приложения:
 
-    java -jar /out/application.jar
+    java -jar ./target/application.jar
 
 Swagger:
 
-    http://localhost:8080/swagger-ui/index.htm
+    http://localhost:8080/swagger-ui/index.html
 Данные для проверки:
 Админ:
 

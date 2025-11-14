@@ -2,12 +2,16 @@ package com.example.bankcards.dto.response;
 
 import com.example.bankcards.entity.enums.CardStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "Ответ с информацией о карте")
 public class CardResponse {
 

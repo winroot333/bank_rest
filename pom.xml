@@ -90,7 +90,7 @@
     </dependencies>
 
     <build>
-        <finalName>application.jar</finalName>
+        <finalName>application</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
