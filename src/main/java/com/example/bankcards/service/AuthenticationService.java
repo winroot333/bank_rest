@@ -13,7 +13,7 @@ public interface AuthenticationService {
      * @param password Пароль
      * @return токен
      */
-    public String signIn(String username, String password);
+    String signIn(String username, String password);
 
     /**
      * Регистрация пользователя
@@ -21,5 +21,5 @@ public interface AuthenticationService {
      * @param user созданный из ДТО пользователь
      * @return токен
      */
-    public String signUp(User user);
+    String signUp(User user);
 }

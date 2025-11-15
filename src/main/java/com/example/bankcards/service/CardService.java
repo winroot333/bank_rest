@@ -15,8 +15,8 @@ public interface CardService {
     /**
      * Создание новой карты для пользователя
      *
-     * @param cardHolder   Имя на карте
-     * @param userId ID пользователя-владельца
+     * @param cardHolder Имя на карте
+     * @param userId     ID пользователя-владельца
      * @return созданная карта
      * @throws UserNotFoundException если пользователь не найден
      */
@@ -44,7 +44,7 @@ public interface CardService {
     /**
      * Обновление баланса карты
      *
-     * @param cardId ID карты
+     * @param cardId  ID карты
      * @param balance новый статус карты
      * @return обновленная карта
      * @throws CardNotFoundException если карта не найдена
@@ -73,7 +73,7 @@ public interface CardService {
     /**
      * Получение всех карт пользователя с пагинацией
      *
-     * @param userId ID пользователя
+     * @param userId   ID пользователя
      * @param pageable параметры пагинации
      * @return страница с картами пользователя
      */
@@ -90,7 +90,7 @@ public interface CardService {
     /**
      * Получение карт по статусу с пагинацией (только для ADMIN)
      *
-     * @param status статус карты для фильтрации
+     * @param status   статус карты для фильтрации
      * @param pageable параметры пагинации
      * @return страница с картами отфильтрованная по статусу
      */
@@ -99,8 +99,8 @@ public interface CardService {
     /**
      * Получение карт пользователя по статусу с пагинацией
      *
-     * @param userId ID пользователя
-     * @param status статус карты для фильтрации
+     * @param userId   ID пользователя
+     * @param status   статус карты для фильтрации
      * @param pageable параметры пагинации
      * @return страница с картами пользователя отфильтрованная по статусу
      */
@@ -111,13 +111,14 @@ public interface CardService {
      *
      * @param cardId ID карты для удаления
      * @param userId ID пользователя, выполняющего операцию
-     * @throws CardNotFoundException если карта не найдена
+     * @throws CardNotFoundException   если карта не найдена
      * @throws CardHasBalanceException если на карте есть средства
      */
     void deleteCard(Long cardId, Long userId);
 
     /**
      * Проверяет является ли пользователь владельцем карты
+     *
      * @param cardId ID карты
      * @param userId ID пользователя для проверки
      */

@@ -103,8 +103,8 @@ class AuthenticationServiceImplTest {
         verify(authenticationManager, times(1)).authenticate(
                 argThat(token ->
                         token instanceof UsernamePasswordAuthenticationToken &&
-                                ((UsernamePasswordAuthenticationToken) token).getPrincipal().equals(username) &&
-                                ((UsernamePasswordAuthenticationToken) token).getCredentials().equals(password)
+                                token.getPrincipal().equals(username) &&
+                                token.getCredentials().equals(password)
                 )
         );
     }

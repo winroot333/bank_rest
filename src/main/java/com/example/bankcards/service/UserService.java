@@ -24,7 +24,7 @@ public interface UserService {
      * @param user Объект пользователя из DTO
      * @return созданный пользователь
      * @throws UsernameAlreadyExistsException если пользователь с таким username уже существует
-     * @throws EmailAlreadyExistsException если пользователь с таким email уже существует
+     * @throws EmailAlreadyExistsException    если пользователь с таким email уже существует
      */
     User create(User user);
 
@@ -49,7 +49,7 @@ public interface UserService {
     /**
      * Получение пользователей по статусу с пагинацией
      *
-     * @param status статус пользователя для фильтрации
+     * @param status   статус пользователя для фильтрации
      * @param pageable параметры пагинации
      * @return страница с пользователями отфильтрованная по статусу
      */

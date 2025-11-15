@@ -3,8 +3,6 @@ package com.example.bankcards.entity;
 import com.example.bankcards.entity.enums.CardStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

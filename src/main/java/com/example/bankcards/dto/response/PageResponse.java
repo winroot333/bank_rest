@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * DTO для единого стиля ответов с pagination
+ *
  * @param <T> Тим элемента сущностей ответа
  */
 @Data

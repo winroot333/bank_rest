@@ -2,7 +2,6 @@ package com.example.bankcards.security;
 
 import com.example.bankcards.entity.User;
 import com.example.bankcards.exception.UserNotFoundException;
-import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.service.CardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -20,6 +19,7 @@ public class UserSecurity {
 
     /**
      * Совпадает ли id залогиненного пользователя с id создателя объекта. Или роль админа
+     *
      * @param ownerUserId id пользователя для проверки
      * @return boolean результат проверки прав
      */
@@ -29,6 +29,7 @@ public class UserSecurity {
 
     /**
      * Являектя ли залогиненный пользователь владельцем карты или админом
+     *
      * @param cardId id карты
      * @return boolean результат проверки
      */
@@ -38,6 +39,7 @@ public class UserSecurity {
 
     /**
      * Есть ли у залогиненного пользователя права админа
+     *
      * @return boolean результат прверки
      */
     public boolean hasAdminRole() {
@@ -47,6 +49,7 @@ public class UserSecurity {
 
     /**
      * Получение id залогиненного пользователя
+     *
      * @return id залогиненного пользователя
      */
     public Long getLoggedInUserId() {

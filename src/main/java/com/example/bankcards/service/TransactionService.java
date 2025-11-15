@@ -6,8 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Сервис для управления финансовыми транзакциями
@@ -18,10 +16,10 @@ public interface TransactionService {
      * Перевод средств между картами одного пользователя
      *
      * @param userId      Id пользователя, выполняющего перевод
-     * @param fromCardId    Id карты с которой совершаем перевод
-     * @param toCardId      Id карты на которую совершаем перевод
-     * @param amount        Сумма
-     * @param description   Описание тразнакции
+     * @param fromCardId  Id карты с которой совершаем перевод
+     * @param toCardId    Id карты на которую совершаем перевод
+     * @param amount      Сумма
+     * @param description Описание тразнакции
      * @return созданная транзакция
      * @throws UserNotFoundException         если пользователь не найден
      * @throws CardNotFoundException         если карта не найдена
@@ -31,7 +29,7 @@ public interface TransactionService {
      * @throws InsufficientFundsException    если недостаточно средств
      */
     Transaction transferBetweenOwnCards(
-            Long userId,Long fromCardId, Long toCardId, BigDecimal amount, String description
+            Long userId, Long fromCardId, Long toCardId, BigDecimal amount, String description
     ) throws UserNotFoundException;
 
     /**
@@ -55,6 +53,7 @@ public interface TransactionService {
 
     /**
      * Получение списка всех транзакция для админа
+     *
      * @param pageable - параметры пагинации
      * @return страница с транзакциями
      */

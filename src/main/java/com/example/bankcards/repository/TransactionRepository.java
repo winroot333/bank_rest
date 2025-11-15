@@ -28,7 +28,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     /**
      * Найти все транзакции по карте (исходящие и входящие) с пагинацией
      *
-     * @param cardId ID карты
+     * @param cardId   ID карты
      * @param pageable параметры пагинации
      * @return страница с транзакциями карты
      */
